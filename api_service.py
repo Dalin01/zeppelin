@@ -9,15 +9,19 @@ import config
 import requests
 
 def api_service ():
-    local_params = {}
+    parameter = {}
+    # Extract relevant parameters for querying the API
     for key, value in config.params.items():
         if value != None:
-            local_params[key] = value
-    response = requests.get(config.BASE_URL + config.endpoint, params=local_params)
-    if response:
-        return response.json()
-    else:
-        return { 'error':'400', 'message': 'An error has occured.' }
+            parameter[key] = value
+    
+    # GET /baseURL/endpoint/parameters
+    response = {}
+    try:
+        response = requests.get(config.BASE_URL + config.endpoint, params=parameter)
+    except requests.exceptions.RequestException as error:
+        raise SystemExit(error)
+    return response
     
     
     

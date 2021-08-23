@@ -6,19 +6,18 @@ Created on Tue Aug 10 18:49:29 2021
 """
 
 def create_db_tables(symbol_list):    
-    commands = [base_table(),rates_table(symbol_list, 'table')]
-
+    commands = [base_table(), rates_table(symbol_list)]
     return commands
 
 def base_table():
     query = '''CREATE TABLE bases
-            (base_id SERIAL PRIMARY KEY NOT NULL,
-            timestamp VARCHAR(100) NOT NULL,
+            (id SERIAL PRIMARY KEY NOT NULL,
+            time_stamp VARCHAR(100) NOT NULL,
             base VARCHAR(100) NOT NULL,
-            date DATE NOT NULL);'''
+            base_date DATE NOT NULL);'''
     return query
 
-def rates_table(col, name):
+def rates_table(col):
     cols = ""
     for item, value in enumerate(col):
         if item < len(col) - 1:
@@ -28,9 +27,8 @@ def rates_table(col, name):
         else:
             cols += value + " NUMERIC"
 
-    query = '''CREATE TABLE rates_'''+name+''' 
-    (rate_id SERIAL PRIMARY KEY NOT NULL, base_id INT NOT NULL, 
-     date_current DATE NOT NULL, ''' + cols + ''', 
-     FOREIGN KEY (base_id) REFERENCES bases (base_id) ON DELETE CASCADE);'''
+    query = '''CREATE TABLE rates (id SERIAL PRIMARY KEY NOT NULL, base INT NOT NULL, 
+     ''' + cols + ''', 
+     FOREIGN KEY (base) REFERENCES bases (id) ON DELETE CASCADE);'''
 
     return query
